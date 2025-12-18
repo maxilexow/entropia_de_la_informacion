@@ -143,25 +143,58 @@ def plot_entropy_complexity_planes(
     m,
     tau,
     spec,
+    bounds=None,
+    labels=None
 ):
     H = subset_df[spec["H_col"]].values
     C = subset_df[spec["C_col"]].values
 
     fig, ax = plt.subplots(figsize=(6, 5))
 
-    # ---- data first (sets zoom) ----
-    ax.scatter(H, C, s=60, zorder=3, label="Images")
+    # ---- Data points
+    ax.scatter(H, C, s=60, color="tab:blue", zorder=3, label="Images")
+    
+    # --- force limits from scatter data
+    ax.update_datalim(ax.scatter(H, C, s=60, zorder=3).get_offsets())
+    ax.autoscale_view()
+        
+    # --- freeze limits
+    xlim = ax.get_xlim()
+    ylim = ax.get_ylim()
+    ax.set_xlim(xlim)
+    ax.set_ylim(ylim)
 
-    # ---- bounds ----
-    N = math.factorial(m)
-    bounds = complexity_bounds(
-        N=N,
-        entropy_func=spec["H_func"],
-        divergence_func=spec["D_func"],
-    )
-
-    plot_HC_bounds(ax, bounds)
-
+    # labels
+    for h, c, lbl in zip(H, C, labels):
+        ax.annotate(
+            lbl,
+            xy=(h, c),
+            xytext=(5, 5),          # offset in points
+            textcoords="offset points",
+            fontsize=8,
+            alpha=0.8,
+        )
+        
+    # ---- HC bounds (optional)
+    if bounds is not None:
+        ax.plot(
+            bounds["Hmax"],
+            bounds["Cmax"],
+            color="red",
+            lw=2,
+            label=r"$C_{\max}$",
+            zorder=2
+        )
+        ax.plot(
+            bounds["Hmin"],
+            bounds["Cmin"],
+            color="blue",
+            lw=2,
+            label=r"$C_{\min}$",
+            zorder=2
+        )
+    # ax.set_xlim(0.8, 1.0)
+    # ax.set_ylim(0, 0.1)
     ax.set_xlabel("Normalized entropy H")
     ax.set_ylabel("Statistical complexity C")
     ax.set_title(f"{spec['label']} H–C plane (m={m}, τ={tau})")
@@ -171,57 +204,36 @@ def plot_entropy_complexity_planes(
     fig.tight_layout()
     plt.show()
 
-
-
-def complexity_bounds(
-    N,
-    entropy_func,
-    divergence_func,
-    n_points=400,
-    eps=1e-12
-):
-    # C_max
-    Hmax, Cmax = [], []
-    for p in np.linspace(1/N, 1, n_points):
-        prob = np.full(N, eps)
+def Cmin_curve(k, entropy_func, divergence_func, n_points=400):
+    H, C = [], []
+    for p in np.linspace(1/k, 1.0, n_points):
+        prob = np.full(k, (1 - p) / (k - 1))
         prob[0] = p
-        prob[1:] = (1 - p) / (N - 1)
-        prob /= prob.sum()
 
-        H = entropy_func(prob)
-        C = H * divergence_func(prob)
-        Hmax.append(H)
-        Cmax.append(C)
+        h = entropy_func(prob)
+        c = h * divergence_func(prob)
 
-    # C_min
-    Hmin, Cmin = [], []
-    for p in np.linspace(0, 1, n_points):
-        prob = np.full(N, eps)
-        prob[0] = p
-        prob[1] = 1 - p
-        prob /= prob.sum()
+        H.append(h)
+        C.append(c)
 
-        H = entropy_func(prob)
-        C = H * divergence_func(prob)
-        Hmin.append(H)
-        Cmin.append(C)
+    return np.array(H), np.array(C)
 
-    print("Cmin max:", np.max(Cmin))
-    print("Cmax max:", np.max(Cmax))
-    print("Cmin min:", np.min(Cmin))
-    print("Cmax min:", np.min(Cmax))
+def Cmax_curve(k, entropy_func, divergence_func, n_points=400):
+    H_all, C_all = [], []
 
-    return (
-        np.array(Hmin), np.array(Cmin),
-        np.array(Hmax), np.array(Cmax),
-    )
+    for j in range(1, k):
+        p_vals = np.linspace(1/(j+1), 1/j, n_points)
 
+        for p in p_vals:
+            prob = np.zeros(k)
+            prob[:j] = p
+            prob[j] = 1 - j*p
 
-def plot_HC_bounds(ax, bounds):
-    """
-    Plot C_min and C_max bounds on an existing axis.
-    """
-    Hmin, Cmin, Hmax, Cmax = bounds
+            h = entropy_func(prob)
+            c = h * divergence_func(prob)
 
-    ax.plot(Hmax, Cmax, color='red', lw=2, label=r"$C_{\max}$")
-    ax.plot(Hmin, Cmin, color='blue',  lw=2, label=r"$C_{\min}$")
+            H_all.append(h)
+            C_all.append(c)
+
+    return np.array(H_all), np.array(C_all)
+
