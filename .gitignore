@@ -205,3 +205,23 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# =====================
+# LaTeX (solo fuentes)
+# =====================
+
+# Auxiliares
+latex/**/*.aux
+latex/**/*.log
+latex/**/*.out
+latex/**/*.toc
+latex/**/*.lof
+latex/**/*.lot
+latex/**/*.fls
+latex/**/*.fdb_latexmk
+latex/**/*.synctex.gz
+
+# Temporales
+latex/**/*.tmp
+latex/**/*.bak
+latex/**/*.swp
