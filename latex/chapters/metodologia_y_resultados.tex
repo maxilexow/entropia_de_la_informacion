@@ -1,0 +1,117 @@
+\chapter{Metodología y resultados}
+
+Para comenzar, hay que transformar las imágenes a vectores 1-D, similar a lo que sería una serie de tiempo. Para ello se utilizó el algoritmo de Hilbert, el cual recorre la imagen de la siguiente manera:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/hilbert_curve.jpg}
+    \caption{Curva de Hilbert obtenida para n=64.}
+    \label{fig:hilbert}
+\end{figure}
+
+Se tomaron imágenes cuadradas de 64x64 píxeles, 
+
+\begin{figure}[H]
+    \centering
+
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{figures/data/oil_1.jpg}
+    \end{subfigure}
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{figures/data/oil_2.jpg}
+    \end{subfigure}
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{figures/data/oil_3.jpg}
+    \end{subfigure}
+
+    \vspace{1mm}
+    {\small Petróleo}
+    \vspace{3mm}
+
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{figures/data/land_1.jpg}
+    \end{subfigure}
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{figures/data/land_2.jpg}
+    \end{subfigure}
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{figures/data/land_3.jpg}
+    \end{subfigure}
+
+    \vspace{1mm}
+    {\small Tierra}
+    \vspace{3mm}
+    
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{figures/data/ship_1.jpg}
+    \end{subfigure}
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{figures/data/ship_2.jpg}
+    \end{subfigure}
+    \begin{subfigure}{0.25\textwidth}
+        \includegraphics[width=\linewidth]{figures/data/ship_3.jpg}
+    \end{subfigure}
+    
+    \vspace{1mm}
+    {\small Barcos}
+
+    \caption{Imágenes SAR utilizadas. Son recortes 64x64 de las imágenes originales, representando 3 clases.}
+    \label{fig:mosaico_3x3}
+\end{figure}
+
+No se tomaron las clases look-alike ni océano, la primera por ser muy similar al petróleo, y la segunda por no tener prácticamente información, es el backgorund, y se ve como ruido.
+
+\section{Patrones ordinales}
+Se calcularon los patrones ordinales con $m=3,4,5$ y $tau=1,2$, obteniendo los siguientes resultados:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/patrones_ordinales/patrones_ordinales_m=3_tau=1.jpg}
+    \caption{Distribución de patrones ordinales para m=3, tau=1.}
+    \label{fig:hilbert}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/patrones_ordinales/patrones_ordinales_m=3_tau=2.jpg}
+    \caption{Distribución de patrones ordinales para m=3, tau=2.}
+    \label{fig:hilbert}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/patrones_ordinales/patrones_ordinales_m=4_tau=1.jpg}
+    \caption{Distribución de patrones ordinales para m=4, tau=1.}
+    \label{fig:hilbert}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/patrones_ordinales/patrones_ordinales_m=4_tau=2.jpg}
+    \caption{Distribución de patrones ordinales para m=4, tau=2.}
+    \label{fig:hilbert}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/patrones_ordinales/patrones_ordinales_m=5_tau=1.jpg}
+    \caption{Distribución de patrones ordinales para m=5, tau=1.}
+    \label{fig:hilbert}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/patrones_ordinales/patrones_ordinales_m=5_tau=2.jpg}
+    \caption{Distribución de patrones ordinales para m=5, tau=2.}
+    \label{fig:hilbert}
+\end{figure}
+
+\section{Entropia y complejidad}
+Luego se calcularon las entropias normalizadas de Shannon, Renyi y Tsallis, a la vez que las complejidades estadísticas de Jensen-Shannon, Jensen-Renyi y Jensen-Tsallis. Con todos estos datos se construyeron los planos complejidad-entropía y se plottearon puntos representando a cada imagen en dichos planos, junto a las curvas Cmín y Cmáx.
+
+

@@ -1,0 +1,38 @@
+\chapter{Introducción}
+
+Para este trabajo decidí utilizar los datos con los cuales trabajo en mi doctorado, titulado "Procesamiento de imágenes satelitales con aprendizaje profundo para identificar áreas de interés geofísico". Con mayor precisión, se busca detectar derrames de petróleo, ya sean naturales o provocados por el hombre (descargas de barcos principalmente).
+
+Los datos utilizados consisten en imágenes satelitales tipo SAR (Synthetic Aperture Radar). Para entrenar los modelos de aprendizaje profundo se utilizan imágenes etiquetadas, las clases son 5:
+\begin{enumerate}
+\item Océano
+\item Derrames de petróleo
+\item "Look-alike"
+\item Barco
+\item Tierra firme
+\end{enumerate}
+
+Para simplificar, en este trabajo, excluí la clase "look-alike", ya que es un poco compleja de clasificar, siendo muy similar a los derrames de petróleo. En la figura se muestra un ejemplo, elegí uno con las 5 clases para poder apreciar las "texturas" de cada una.
+
+\begin{figure}[H]
+    \centering
+
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/img_0816.jpg}
+        \caption{Imágen SAR}
+        \label{fig:img1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figures/img_0816.png}
+        \caption{Máscara}
+        \label{fig:img2}
+    \end{subfigure}
+
+    \caption{Ejemplo de imágen SAR vs máscara. Negro: océano, cian: petróleo, rojo: look-alike, marrón: barco, verde: tierra.}
+    \label{fig:side_by_side}
+\end{figure}
+
+Entonces la idea sería lograr que mediante el gráfico del plano complejidad - entropía, poder distinguir alguna de estas clases.
+

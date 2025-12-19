@@ -1,0 +1,40 @@
+\documentclass[12pt,a4paper]{report} % base simple
+
+% --- Paquetes básicos ---
+\usepackage[utf8]{inputenc}  % caracteres UTF-8
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}         % fuente limpia
+\usepackage[spanish]{babel} % idioma (elige el principal)
+\usepackage{geometry}        % márgenes
+\geometry{margin=2.5cm}
+\usepackage{graphicx}        % para incluir figuras
+\usepackage{float}			% H en figuras
+\usepackage{amsmath,amssymb} % matemáticas
+\usepackage{hyperref}        % links internos y URL
+\usepackage[backend=biber,style=numeric-comp, sorting=none]{biblatex}
+\addbibresource{zotero_oil_spill_detection.bib}
+\usepackage{caption}         % para captions personalizadas
+\usepackage{siunitx}         % unidades
+\usepackage{enumitem}        % listas personalizadas
+\usepackage{indentfirst}		% indent automatically
+\usepackage{subcaption} 		% side-by-side images
+
+
+% --- Formato de título y autores ---
+\title{Herramientas de Teoríıa de la Información aplicadas a clasificación - Trabajo Final}
+\author{
+  Maximiliano Lexow\thanks{IFISUR, Bahía Blanca, Argentina. Email: \texttt{lexow.maximiliano@uns.edu.ar}}
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\input{chapters/introduccion}
+\input{chapters/metodologia_y_resultados}
+\input{chapters/resultados}
+\input{chapters/discusion}
+
+
+\end{document}
