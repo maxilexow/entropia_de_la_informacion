@@ -137,6 +137,7 @@ from itertools import product
 import pandas as pd 
 import matplotlib.pyplot as plt
 import math
+from adjustText import adjust_text
 
 def plot_entropy_complexity_planes(
     subset_df,
@@ -153,7 +154,7 @@ def plot_entropy_complexity_planes(
 
     # ---- Data points
     ax.scatter(H, C, s=60, color="tab:blue", zorder=3, label="Images")
-    
+
     # --- force limits from scatter data
     ax.update_datalim(ax.scatter(H, C, s=60, zorder=3).get_offsets())
     ax.autoscale_view()
@@ -165,15 +166,29 @@ def plot_entropy_complexity_planes(
     ax.set_ylim(ylim)
 
     # labels
+    texts = []
     for h, c, lbl in zip(H, C, labels):
-        ax.annotate(
-            lbl,
-            xy=(h, c),
-            xytext=(5, 5),          # offset in points
-            textcoords="offset points",
-            fontsize=8,
-            alpha=0.8,
+        texts.append(
+            ax.text(
+                h, c, lbl,
+                fontsize=12,
+                fontweight="bold",
+                ha="center",
+                va="center",
+                zorder=4
+            )
         )
+    
+    adjust_text(
+        texts,
+        ax=ax,
+        expand=(1.2, 2.0),
+        arrowprops=dict(
+            arrowstyle="-",
+            lw=0.8,
+            color="black"
+        )
+    )
         
     # ---- HC bounds (optional)
     if bounds is not None:
@@ -202,6 +217,11 @@ def plot_entropy_complexity_planes(
     ax.legend()
     ax.grid(True)
     fig.tight_layout()
+    plt.savefig(
+        f"latex/figures/hxc_plane/{spec['filename']}_HC_plane_m={m}_tau={tau}.jpg",
+        dpi=300,
+        bbox_inches="tight"
+    )
     plt.show()
 
 def Cmin_curve(k, entropy_func, divergence_func, n_points=400):
